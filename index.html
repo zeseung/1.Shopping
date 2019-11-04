@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
   <head>
-    
-    <!-- Webpage Title -->
+    <!-- 10/31
+    사진과 리스트의 너비랑 제출 폼의 너비가 다른 이유
+    폼에 올바른 텍스트가 담겨 있는지 확인하는 함수를 onclick에 추가
+    수량을 선택하지 않았을 때 선택하도록 유도
+    제출 버튼을 누르고 서버로부터 값을 받기 전에 로딩 중 표시 -->
     <title>Partners Mall</title>
 
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -23,8 +25,7 @@
     <!-- 폰트 적용 -->
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300&display=swap" rel="stylesheet">
 
-    <script>
-      // 구매하기
+    <script> // 구매하기
       function buying() {
         let name = $('#buyerName').val();
         let count = $('#buyerCount').val();
@@ -39,17 +40,27 @@
           success: function(response){
             if (response['result'] == "success") {
               alert('구매하였습니다.');
-              location.reload(); // 화면 새로고침 (학습자료에서 앞에 window라고 붙이는 이유는 무엇인가요?)
+              location.reload();
             } else {
-              alert('구매하지 못했습니다.') // 이거는 어떻게 동작 시킬 수 있을까요?
+              alert('구매하지 못했습니다.')
             }
           }
         })
       }
     </script>
 
-    <script>
-      // 구매자목록
+<script>
+$('#buyingButton').click(buying(){
+  $('#loadingimg').show(); //<----here
+  $.ajax({
+    ....
+   success:buying(result){
+       $('#loadingimg').hide();  //<--- hide again
+   }
+}
+</script>
+
+    <script> // 구매자 목록
       $(document).ready(function(){
         $('#buyerList').html(''); // html 지우기
         listing();
@@ -120,7 +131,7 @@
     <div class="text-form home">
      <input id=buyerName type="text" class="form-control space1 text-form-background-color" placeholder="주문자 성함">
       <select id=buyerCount class="form-control space2 text-form-background-color">
-        <option selected>수량 선택</option>
+        <option selected alertname="수량">수량 선택</option>
         <option>1</option>
         <option>2</option>
         <option>3</option>
@@ -132,7 +143,8 @@
     </div>
     <div style="padding:0px 0px 30px 0px;"></div>
     <center>
-      <button onclick="buying()" type="button" class="btn btn-primary btn-lg button-style">구매</button>
+      <button onclick="buying()" id="buyingButton" type="button" class="btn btn-primary btn-lg button-style">구매</button>
+      <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" id="loadingimg" style="display:none">
     </center>
     <div style="padding:0px 0px 60px 0px;"></div>
 
