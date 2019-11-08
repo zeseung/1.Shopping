@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    <!-- Webpage Title -->
+    <title>Partners Mall</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <!-- JS -->   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    
+    <!-- 폰트 적용 -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300&display=swap" rel="stylesheet">
+
+    <script>
+      // 구매하기
+      function buying() {
+        let name = $('#buyerName').val();
+        let count = $('#buyerCount').val();
+        let address = $('#buyerAddress').val();
+        let phone = $('#buyerPhone').val();
+        let item = 'galaxyWatchActive2';
+
+        $.ajax({
+          type: "POST",
+          //url: "http://spartacodingclub.shop/order",
+          url: "/order",
+          data: { name_give: name, count_give: count, address_give: address, phone_give: phone, item_give: item },
+          success: function(response){
+            if (response['result'] == "success") {
+              alert('구매하였습니다.');
+              location.reload();
+            } else {
+              alert('구매하지 못했습니다.')
+            }
+          }
+        })
+      }
+    </script>
+
+    <script>
+      // 구매자목록
+      $(document).ready(function(){
+        $('#buyerList').html(''); // html 지우기
+        listing();
+      });
+
+      function listing() {
+        $.ajax({
+          type: "GET",
+          //url: "http://spartacodingclub.shop/order?item_give=galaxyWatchActive2",
+          url: "/order?item_give=galaxyWatchActive2", 
+          data: {},
+          success: function(response){
+            if (response['result'] == "success") {
+              let orders = response['orders'];
+              for (let i = 0; i < orders.length; i++) {
+                makeCard(orders[i]['address'], orders[i]['count'], orders[i]['name'], orders[i]['phone'])
+              }
+            } else {
+              alert('구매자 목록을 정상적으로 출력하지 못했습니다.');
+            }
+          }
+        })
+      }
+
+      function makeCard(address, count, name, phone) {
+        let tempHtml = '<tr>\
+            <th scope="row">1</th>\
+            <td>'+name+'</td>\
+            <td>'+count+'</td>\
+            <td>'+address+'</td>\
+            <td>'+phone+'</td>\
+          </tr>'; //row 번호를 자동 +1 노출하는 방법을 모르겠음
+        $('#buyerList').append(tempHtml);
+      }
+    </script>
+
+    <style>
+      * {font-family: 'Noto Sans KR', sans-serif;}
+      .home {width: auto; max-width: 1280px; margin: 0px auto 0px auto;}
+      .text-title {font-size: 20pt; text-align: center; margin-top: 24px;}
+      .text-price-original {font-size: 12pt; text-align: center; margin-top: 4px;}
+      .text-price {font-size: 14pt; text-align: center; margin-top: 0px;}
+      .text-body {font-size: 12pt; text-align: center; margin-top: 20px;}
+      .text-form {max-width: 440px; padding: 0px auto 0px auto;}
+      .space1 {margin-top: 8px;}
+      .space2 {margin-top: 8px; padding-left: 6px;}
+      .space3 {max-width:1280px; margin: 0px auto 0px auto;}
+      .text-form-background-color {background-color: #FAFAFA;}
+      .button-style {width: 444px;}
+    </style>
+  </head>
+  
+  <body> 
+    <!--상단-->
+    <div class="home">
+      <img src="https://t1.daumcdn.net/cfile/tistory/99744D385D773B4824" class="img-fluid" alt="Responsive image">
+  	</div>
+	  <p class="home text-title"> 삼성전자 갤럭시워치 액티브2 스테인리스 44mm </p>
+    <p class="home text-price-original"><s> 440,000원	</s></p>
+    <p class="home text-price"><strong> 430,000원 </strong></p>
+	  <div class="home text-body">
+      더 커진 화면 속에 나를 위한 이야기가 가득합니다.<br>
+      나의 일상을 함께 하는 새로워진 워치 액티브2를 만나보세요.<br>
+		</div>
+    <hr class="my-4 home">
+    
+    <!--구매-->
+    <div class="text-form home">
+     <input id=buyerName type="text" class="form-control space1 text-form-background-color" placeholder="주문자 성함">
+      <select id=buyerCount class="form-control space2 text-form-background-color">
+        <option selected>수량 선택</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+     <input id=buyerAddress type="text" class="form-control space1 text-form-background-color" placeholder="주소">
+     <input id=buyerPhone type="text" class="form-control space1 text-form-background-color" placeholder="연락처">
+    </div>
+    <div style="padding:0px 0px 30px 0px;"></div>
+    <center>
+      <button onclick="buying()" type="button" class="btn btn-primary btn-lg button-style">구매</button>
+    </center>
+    <div style="padding:0px 0px 60px 0px;"></div>
+
+    <!--구매자 목록-->
+    <table class="table table-striped space3">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">성함</th>
+          <th scope="col">수량</th>
+          <th scope="col">주소</th>
+          <th scope="col">연락처</th>
+        </tr>
+      </thead>
+      <tbody id=buyerList>
+        <tr>
+          <th scope="row">1</th>
+          <td>홍길동</td>
+          <td>2</td>
+          <td>서울시 강남구</td>
+          <td>01012345678</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>이재용</td>
+          <td>1</td>
+          <td>경기도 용인시</td>
+          <td>01012345678</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>스티브잡스</td>
+          <td>99</td>
+          <td>미시건주 이스트랜딩 시티</td>
+          <td>01012345678</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--하단-->
+    <div style="padding:0px 0px 40px 0px;"></div>
+    <p class="home text-body"> Copyright(c) zeseung All rights reserved. </p>
+    <div style="padding:0px 0px 50px 0px;"></div>
+  </body>
+</html>
+
+<!-- https://coupa.ng/bjq8N4 -->
