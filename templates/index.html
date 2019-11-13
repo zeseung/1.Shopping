@@ -64,9 +64,9 @@
           data: {},
           success: function(response){
             if (response['result'] == "success") {
-              let orders = response['orders'];
-              for (let i = 0; i < orders.length; i++) {
-                makeCard(orders[i]['address'], orders[i]['count'], orders[i]['name'], orders[i]['phone'])
+              let buyerList = response['buyerList'];
+              for (let i = 0; i < buyerList.length; i++) {
+                makeCard(buyerList[i]['address'], buyerList[i]['count'], buyerList[i]['name'], buyerList[i]['phone'])
               }
             } else {
               alert('구매자 목록을 정상적으로 출력하지 못했습니다.');
