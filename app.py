@@ -17,7 +17,7 @@ def home():
 def listing():
     # author_give 클라이언트가 준 author를 가져오기
     item_receive = request.args.get('item_give')
-    # author의 값이 받은 author와 일치하는 document 찾기 & _id 값은 출력에서 제외하기
+    # author의 값이 받은 author와 일치하는 document 찾기 & _id 값은 출력에서 제외하기 / 되면 articles를 BUYER LIST로 변경
     result = list(db.buyerlist.find({'item':item_receive},{'_id':0}))
     # articles라는 키 값으로 내려주기
     return jsonify({'result':'success', 'buyerlist':result})
